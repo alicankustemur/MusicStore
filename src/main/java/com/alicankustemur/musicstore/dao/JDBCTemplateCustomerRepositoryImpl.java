@@ -13,11 +13,11 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import com.alicankustemur.musicstore.model.Album;
 import com.alicankustemur.musicstore.model.Customer;
 
-public class JDBCTemplateCustomerRepositoryImpl implements CustomerRepository
+public class JdbcTemplateCustomerRepositoryImpl implements CustomerRepository
 {
 	private JdbcTemplate jdbcTemplate;
 
-	public JDBCTemplateCustomerRepositoryImpl(DataSource dataSource)
+	public JdbcTemplateCustomerRepositoryImpl(DataSource dataSource)
 	{
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}

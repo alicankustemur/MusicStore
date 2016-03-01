@@ -13,19 +13,20 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.alicankustemur.musicstore.model.Album;
 
-public class JDBCTemplateAlbumRepositoryImpl implements AlbumRepository
+public class JdbcTemplateAlbumRepositoryImpl implements AlbumRepository
 {
 	private JdbcTemplate jdbcTemplate;
 
-	public JDBCTemplateAlbumRepositoryImpl(DataSource dataSource)
+	public JdbcTemplateAlbumRepositoryImpl(DataSource dataSource)
 	{
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
 
 	public void save(Album album)
 	{
-		// VTODO Auto-generated method stub
-
+		String sql = "INSERT INTO album (name,artist_name,variation,genre,song_numbers) VALUES (?,?,?,?,?)";
+		jdbcTemplate.update(sql, album.getName(), album.getArtistName(), album.getVariation(), album.getGenre(),
+				album.getSongNumbers());
 	}
 
 	public List<Album> getAllAlbumByArtistName(String artistName)
@@ -41,6 +42,13 @@ public class JDBCTemplateAlbumRepositoryImpl implements AlbumRepository
 
 	}
 
+	public Album getAlbumByName(String name)
+	{
+		String sql = "SELECT id,name,artist_name,variation,genre,song_numbers FROM album WHERE name = ? ";
+		return jdbcTemplate.queryForObject(sql, new AlbumRowMapper(), name);
+
+	}
+
 	private class AlbumExtractor implements ResultSetExtractor
 	{
 		public Album extractData(ResultSet rs) throws SQLException, DataAccessException
@@ -52,6 +60,7 @@ public class JDBCTemplateAlbumRepositoryImpl implements AlbumRepository
 			album.setVariation(rs.getString("variation"));
 			album.setGenre(rs.getString("genre"));
 			album.setSongNumbers(rs.getInt("song_numbers"));
+			System.out.println(rs.getString("artist_name") + "albums returned.");
 			return album;
 		}
 	}
@@ -63,6 +72,31 @@ public class JDBCTemplateAlbumRepositoryImpl implements AlbumRepository
 		{
 			AlbumExtractor extractor = new AlbumExtractor();
 			return extractor.extractData(rs);
+		}
+
+	}
+
+	private Album mapAlbum(ResultSet rs) throws SQLException
+	{
+		Album album = new Album();
+		album.setId(rs.getInt("id"));
+		album.setName(rs.getString("name"));
+		album.setArtistName(rs.getString("artist_name"));
+		album.setVariation(rs.getString("variation"));
+		album.setGenre(rs.getString("genre"));
+		album.setSongNumbers(rs.getInt("song_numbers"));
+		System.out.println(rs.getString("name") + " album returned.");
+		return album;
+
+	}
+
+	private class AlbumRowMapper implements RowMapper<Album>
+	{
+
+		public Album mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
+
+			return mapAlbum(rs);
 		}
 
 	}

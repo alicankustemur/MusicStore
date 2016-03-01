@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 
 import com.alicankustemur.musicstore.model.Customer;
 
-public class JDBCCustomerRepositoryImpl implements CustomerRepository
+public class JdbcCustomerRepositoryImpl implements CustomerRepository
 {
 	private DataSource dataSource;
 

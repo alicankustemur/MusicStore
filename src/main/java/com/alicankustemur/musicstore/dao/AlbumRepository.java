@@ -12,4 +12,6 @@ public interface AlbumRepository
 
 	public List<Album> getAllAlbumByArtistName(String artistName);
 
+	public Album getAlbumByName(String name);
+
 }

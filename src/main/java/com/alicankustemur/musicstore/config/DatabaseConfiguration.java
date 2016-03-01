@@ -1,7 +1,6 @@
 package com.alicankustemur.musicstore.config;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -13,7 +12,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 public class DatabaseConfiguration
 {
 
-	@Inject
+	@Autowired
 	public Environment environment;
 
 	public DatabaseConfiguration()

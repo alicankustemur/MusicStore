@@ -24,4 +24,10 @@ public class AlbumRepositoryImpl implements AlbumRepository
 
 	}
 
+	public Album getAlbumByName(String name)
+	{
+		// VTODO Auto-generated method stub
+		return null;
+	}
+
 }

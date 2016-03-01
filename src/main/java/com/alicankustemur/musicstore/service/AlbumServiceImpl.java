@@ -1,34 +1,28 @@
 package com.alicankustemur.musicstore.service;
 
-import com.alicankustemur.musicstore.dao.AlbumRepository;
+import com.alicankustemur.musicstore.dao.JdbcTemplateAlbumRepositoryImpl;
 import com.alicankustemur.musicstore.model.Album;
 
 public class AlbumServiceImpl implements AlbumService
 {
-	private AlbumRepository albumRepository;
+	private JdbcTemplateAlbumRepositoryImpl albumRepository;
 
 	public AlbumServiceImpl()
 	{
 		// VTODO Auto-generated constructor stub
 	}
 
-	public AlbumServiceImpl(AlbumRepository albumRepository)
-	{
-		super();
-		this.albumRepository = albumRepository;
-	}
-
-	public AlbumRepository getAlbumRepository()
+	public JdbcTemplateAlbumRepositoryImpl getAlbumRepository()
 	{
 		return albumRepository;
 	}
 
-	public void setAlbumRepository(AlbumRepository albumRepository)
+	public void setAlbumRepository(JdbcTemplateAlbumRepositoryImpl albumRepository)
 	{
 		this.albumRepository = albumRepository;
 	}
 
-	public Album sellAAlbum(String variation, String name, String artistName, String genre, int songNumbers)
+	public Album sellAAlbum(String name, String artistName, String variation, String genre, int songNumbers)
 	{
 		Album album = new Album();
 		album.setVariation(variation);

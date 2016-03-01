@@ -11,7 +11,7 @@ import javax.sql.DataSource;
 
 import com.alicankustemur.musicstore.model.Album;
 
-public class JDBCAlbumRepositoryImpl implements AlbumRepository
+public class JdbcAlbumRepositoryImpl implements AlbumRepository
 {
 
 	private DataSource dataSource;
@@ -100,6 +100,12 @@ public class JDBCAlbumRepositoryImpl implements AlbumRepository
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public Album getAlbumByName(String name)
+	{
+		// VTODO Auto-generated method stub
+		return null;
 	}
 
 }

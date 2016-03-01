@@ -1,26 +1,28 @@
 package com.alicankustemur.musicstore.config;
 
-import javax.inject.Inject;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.alicankustemur.musicstore.dao.AlbumRepository;
 import com.alicankustemur.musicstore.dao.AlbumRepositoryImpl;
-import com.alicankustemur.musicstore.dao.JDBCAlbumRepositoryImpl;
-import com.alicankustemur.musicstore.dao.JDBCCustomerRepositoryImpl;
-import com.alicankustemur.musicstore.dao.JDBCTemplateAlbumRepositoryImpl;
-import com.alicankustemur.musicstore.dao.JDBCTemplateCustomerRepositoryImpl;
+import com.alicankustemur.musicstore.dao.CustomerRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JdbcAlbumRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JdbcCustomerRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JdbcTemplateAlbumRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JdbcTemplateCustomerRepositoryImpl;
 import com.alicankustemur.musicstore.service.AlbumService;
 import com.alicankustemur.musicstore.service.AlbumServiceImpl;
+import com.alicankustemur.musicstore.service.CustomerService;
+import com.alicankustemur.musicstore.service.CustomerServiceImpl;
 
 @Configuration
 @Import({DatabaseConfiguration.class})
 public class BeanConfiguration
 {
 
-	@Inject
+	@Autowired
 	private DatabaseConfiguration databaseConfiguration;
 
 	public BeanConfiguration()
@@ -37,41 +39,57 @@ public class BeanConfiguration
 	@Bean
 	public AlbumService createAlbumServiceBean()
 	{
-		AlbumServiceImpl albumService = new AlbumServiceImpl();
-		albumService.setAlbumRepository(createAlbumRepositoryBean());
-		return albumService;
+		AlbumServiceImpl service = new AlbumServiceImpl();
+		service.setAlbumRepository(createJDBCTemplateAlbumRepositoryImplBean());
+		return service;
 	}
 
 	@Bean
-	public JDBCAlbumRepositoryImpl createJDBCAlbumRepositoryImplBean()
+	public CustomerService createCustomerServiceBean()
 	{
-		JDBCAlbumRepositoryImpl jdbcAlbum = new JDBCAlbumRepositoryImpl();
-		jdbcAlbum.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
-		return jdbcAlbum;
+		CustomerServiceImpl service = new CustomerServiceImpl();
+		service.setRepository(createJDBCTemplateCustomerRepositoryImplBean());
+		return service;
 	}
 
 	@Bean
-	public JDBCCustomerRepositoryImpl createJDBCCustomerRepositoryImplBean()
+	public JdbcAlbumRepositoryImpl createJDBCAlbumRepositoryImplBean()
 	{
-		JDBCCustomerRepositoryImpl jdbcCustomer = new JDBCCustomerRepositoryImpl();
-		jdbcCustomer.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
-		return jdbcCustomer;
+		JdbcAlbumRepositoryImpl repository = new JdbcAlbumRepositoryImpl();
+		repository.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
+		return repository;
 	}
 
 	@Bean
-	public JDBCTemplateCustomerRepositoryImpl createJDBCTemplateCustomerRepositoryImpl()
+	public JdbcCustomerRepositoryImpl createJDBCCustomerRepositoryImplBean()
 	{
-		JDBCTemplateCustomerRepositoryImpl jdbcCustomerTemplate = new JDBCTemplateCustomerRepositoryImpl(
+		JdbcCustomerRepositoryImpl repository = new JdbcCustomerRepositoryImpl();
+		repository.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
+		return repository;
+	}
+
+	@Bean
+	public JdbcTemplateCustomerRepositoryImpl createJDBCTemplateCustomerRepositoryImplBean()
+	{
+		JdbcTemplateCustomerRepositoryImpl repository = new JdbcTemplateCustomerRepositoryImpl(
 				databaseConfiguration.createDriverManagerDataSourceBean());
-		return jdbcCustomerTemplate;
+		return repository;
 	}
 
 	@Bean
-	public JDBCTemplateAlbumRepositoryImpl createJDBCTemplateAlbumRepositoryImpl()
+	public JdbcTemplateAlbumRepositoryImpl createJDBCTemplateAlbumRepositoryImplBean()
 	{
-		JDBCTemplateAlbumRepositoryImpl jdbcAlbumTemplate = new JDBCTemplateAlbumRepositoryImpl(
+		JdbcTemplateAlbumRepositoryImpl repository = new JdbcTemplateAlbumRepositoryImpl(
 				databaseConfiguration.createDriverManagerDataSourceBean());
-		return jdbcAlbumTemplate;
+		return repository;
+	}
+
+	@Bean
+	public CustomerRepositoryImpl createCustomerRepositoryImplBean()
+	{
+		CustomerRepositoryImpl repository = new CustomerRepositoryImpl();
+		repository.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
+		return repository;
 	}
 
 }
