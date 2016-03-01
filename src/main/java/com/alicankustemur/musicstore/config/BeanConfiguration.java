@@ -1,6 +1,7 @@
 package com.alicankustemur.musicstore.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -9,6 +10,8 @@ import com.alicankustemur.musicstore.dao.AlbumRepository;
 import com.alicankustemur.musicstore.dao.AlbumRepositoryImpl;
 import com.alicankustemur.musicstore.dao.JDBCAlbumRepositoryImpl;
 import com.alicankustemur.musicstore.dao.JDBCCustomerRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JDBCTemplateAlbumRepositoryImpl;
+import com.alicankustemur.musicstore.dao.JDBCTemplateCustomerRepositoryImpl;
 import com.alicankustemur.musicstore.service.AlbumService;
 import com.alicankustemur.musicstore.service.AlbumServiceImpl;
 
@@ -17,7 +20,7 @@ import com.alicankustemur.musicstore.service.AlbumServiceImpl;
 public class BeanConfiguration
 {
 
-	@Autowired
+	@Inject
 	private DatabaseConfiguration databaseConfiguration;
 
 	public BeanConfiguration()
@@ -53,6 +56,22 @@ public class BeanConfiguration
 		JDBCCustomerRepositoryImpl jdbcCustomer = new JDBCCustomerRepositoryImpl();
 		jdbcCustomer.setDataSource(databaseConfiguration.createDriverManagerDataSourceBean());
 		return jdbcCustomer;
+	}
+
+	@Bean
+	public JDBCTemplateCustomerRepositoryImpl createJDBCTemplateCustomerRepositoryImpl()
+	{
+		JDBCTemplateCustomerRepositoryImpl jdbcCustomerTemplate = new JDBCTemplateCustomerRepositoryImpl(
+				databaseConfiguration.createDriverManagerDataSourceBean());
+		return jdbcCustomerTemplate;
+	}
+
+	@Bean
+	public JDBCTemplateAlbumRepositoryImpl createJDBCTemplateAlbumRepositoryImpl()
+	{
+		JDBCTemplateAlbumRepositoryImpl jdbcAlbumTemplate = new JDBCTemplateAlbumRepositoryImpl(
+				databaseConfiguration.createDriverManagerDataSourceBean());
+		return jdbcAlbumTemplate;
 	}
 
 }

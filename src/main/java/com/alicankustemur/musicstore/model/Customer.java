@@ -6,19 +6,6 @@ public class Customer
 	private String	surname;
 	private Album	album;
 
-	public Customer()
-	{
-		// VTODO Auto-generated constructor stub
-	}
-
-	public Customer(String name, String surname, Album album)
-	{
-		super();
-		this.name = name;
-		this.surname = surname;
-		this.album = album;
-	}
-
 	public String getName()
 	{
 		return name;

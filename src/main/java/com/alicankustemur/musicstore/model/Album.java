@@ -80,11 +80,4 @@ public class Album
 		return solded;
 	}
 
-	@Override
-	public String toString()
-	{
-		return "Album [variation=" + variation + ", name=" + name + ", artistName=" + artistName + ", genre=" + genre
-				+ ", songNumbers=" + songNumbers + ", solded=" + solded + "]";
-	}
-
 }
