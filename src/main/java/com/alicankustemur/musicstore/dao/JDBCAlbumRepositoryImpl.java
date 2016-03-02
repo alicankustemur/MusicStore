@@ -9,18 +9,18 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.alicankustemur.musicstore.model.Album;
 
+@Component
 public class JdbcAlbumRepositoryImpl implements AlbumRepository
 {
 
 	private DataSource dataSource;
 
-	public DataSource getDataSource()
-	{
-		return dataSource;
-	}
-
+	@Autowired
 	public void setDataSource(DataSource dataSource)
 	{
 		this.dataSource = dataSource;

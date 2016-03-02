@@ -2,9 +2,20 @@ package com.alicankustemur.musicstore.model;
 
 public class Customer
 {
+	private long	id;
 	private String	name;
 	private String	surname;
 	private Album	album;
+
+	public long getId()
+	{
+		return id;
+	}
+
+	public void setId(long id)
+	{
+		this.id = id;
+	}
 
 	public String getName()
 	{

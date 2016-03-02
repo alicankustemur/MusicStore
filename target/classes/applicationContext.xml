@@ -7,6 +7,5 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.alicankustemur.musicstore" />
-	<context:component-scan base-package="com.alicankustemur.musicstore.dao" />
-		
+		<bean name="albumService" class="com.alicankustemur.musicstore.service.AlbumServiceImpl"></bean>
 </beans>

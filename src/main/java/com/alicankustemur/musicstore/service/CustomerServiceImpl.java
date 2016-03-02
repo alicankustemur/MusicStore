@@ -1,9 +1,12 @@
 package com.alicankustemur.musicstore.service;
 
+import org.springframework.stereotype.Component;
+
 import com.alicankustemur.musicstore.dao.JdbcTemplateCustomerRepositoryImpl;
 import com.alicankustemur.musicstore.model.Album;
 import com.alicankustemur.musicstore.model.Customer;
 
+@Component
 public class CustomerServiceImpl implements CustomerService
 {
 

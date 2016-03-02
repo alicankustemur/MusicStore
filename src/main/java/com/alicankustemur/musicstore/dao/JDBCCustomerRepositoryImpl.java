@@ -2,20 +2,21 @@ package com.alicankustemur.musicstore.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.alicankustemur.musicstore.model.Customer;
 
+@Component
 public class JdbcCustomerRepositoryImpl implements CustomerRepository
 {
 	private DataSource dataSource;
 
-	public DataSource getDataSource()
-	{
-		return dataSource;
-	}
-
+	@Autowired
 	public void setDataSource(DataSource dataSource)
 	{
 		this.dataSource = dataSource;
@@ -42,6 +43,12 @@ public class JdbcCustomerRepositoryImpl implements CustomerRepository
 			// VTODO: handle exception
 		}
 
+	}
+
+	public int[] createRandomCustomer(List<Customer> customer)
+	{
+		// VTODO Auto-generated method stub
+		return null;
 	}
 
 }
