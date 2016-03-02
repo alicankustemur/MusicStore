@@ -9,12 +9,6 @@ import com.alicankustemur.musicstore.model.Album;
 @Component
 public class AlbumServiceImpl implements AlbumService
 {
-	@javax.annotation.PostConstruct
-	public void postConstruct()
-	{
-		System.out.println("hopbaaa");
-	}
-
 	@Autowired
 	private JdbcTemplateAlbumRepositoryImpl albumRepository;
 
