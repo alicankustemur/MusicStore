@@ -4,57 +4,77 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 
 import com.alicankustemur.musicstore.model.Album;
 
 @Component
-public class JdbcTemplateAlbumRepositoryImpl implements AlbumRepository
+public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements AlbumRepository
 {
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public JdbcTemplateAlbumRepositoryImpl(DataSource dataSource)
+	private DataSource dataSource;
+
+	@PostConstruct
+	public void initialize()
 	{
-		jdbcTemplate = new JdbcTemplate(dataSource);
+		setDataSource(dataSource);
 	}
 
+	@Override
 	public void save(Album album)
 	{
-		String sql = "INSERT INTO album (name,artist_name,variation,genre,song_numbers) VALUES (?,?,?,?,?)";
-		jdbcTemplate.update(sql, album.getName(), album.getArtistName(), album.getVariation(), album.getGenre(),
-				album.getSongNumbers());
+		Album dbAlbum = getAlbumByName(album.getName());
+
+		if (dbAlbum == null)
+		{
+			String sql = "INSERT INTO album (name,artist_name,variation,genre,song_numbers) VALUES (?,?,?,?,?)";
+			getJdbcTemplate().update(sql, album.getName(), album.getArtistName(), album.getVariation(),
+					album.getGenre(), album.getSongNumbers());
+			System.out.println(album.getName() + " album saved.");
+
+		}
+		else
+		{
+			System.out.println(album.getName() + " is already exists in database.");
+		}
+
 	}
 
+	@Override
 	public List<Album> getAllAlbumByArtistName(String artistName)
 	{
 		ResultSetExtractor<Album> albumExtractor = new AlbumExtractor();
 		String sql = "SELECT id,name,artist_name,variation,genre,song_numbers FROM album WHERE artist_name = ? ";
-		return jdbcTemplate.query(sql, new Object[] {artistName}, new AlbumMapper());
+		return getJdbcTemplate().query(sql, new Object[] {artistName}, new AlbumMapper());
 	}
 
+	@Override
 	public void deleteByName(String name)
 	{
 		// VTODO Auto-generated method stub
 
 	}
 
+	@Override
 	public Album getAlbumByName(String name)
 	{
 		String sql = "SELECT id,name,artist_name,variation,genre,song_numbers FROM album WHERE name = ? ";
-		return jdbcTemplate.queryForObject(sql, new AlbumRowMapper(), name);
+		return getJdbcTemplate().queryForObject(sql, new AlbumRowMapper(), name);
 
 	}
 
 	private class AlbumExtractor implements ResultSetExtractor
 	{
+		@Override
 		public Album extractData(ResultSet rs) throws SQLException, DataAccessException
 		{
 			Album album = new Album();
@@ -72,6 +92,7 @@ public class JdbcTemplateAlbumRepositoryImpl implements AlbumRepository
 	private class AlbumMapper implements RowMapper
 	{
 
+		@Override
 		public Object mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
 			AlbumExtractor extractor = new AlbumExtractor();
@@ -97,6 +118,7 @@ public class JdbcTemplateAlbumRepositoryImpl implements AlbumRepository
 	private class AlbumRowMapper implements RowMapper<Album>
 	{
 
+		@Override
 		public Album mapRow(ResultSet rs, int rowNum) throws SQLException
 		{
 

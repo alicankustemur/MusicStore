@@ -5,4 +5,6 @@ import com.alicankustemur.musicstore.model.Album;
 public interface AlbumService
 {
 	public Album sellAAlbum(String name, String artistName, String variation, String genre, int songNumbers);
+
+	public Album getAlbumByName(String name);
 }

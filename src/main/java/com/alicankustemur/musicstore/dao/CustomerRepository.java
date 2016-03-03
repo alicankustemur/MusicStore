@@ -8,5 +8,7 @@ public interface CustomerRepository
 {
 	public void save(Customer customer);
 
-	public int[] createRandomCustomer(List<Customer> customer);
+	public int[] createBatchCustomer(List<Customer> customer);
+
+	public Customer getCustomerByName(String name);
 }

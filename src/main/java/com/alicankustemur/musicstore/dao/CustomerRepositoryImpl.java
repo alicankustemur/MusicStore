@@ -25,6 +25,7 @@ public class CustomerRepositoryImpl implements CustomerRepository
 		insertCustomer = new SimpleJdbcInsert(dataSource).withTableName("customer");
 	}
 
+	@Override
 	public void save(Customer customer)
 	{
 		Map<String, Object> parameters = new HashMap<String, Object>(4);
@@ -35,7 +36,15 @@ public class CustomerRepositoryImpl implements CustomerRepository
 
 	}
 
-	public int[] createRandomCustomer(List<Customer> customer)
+	@Override
+	public int[] createBatchCustomer(List<Customer> customer)
+	{
+		// VTODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer getCustomerByName(String name)
 	{
 		// VTODO Auto-generated method stub
 		return null;

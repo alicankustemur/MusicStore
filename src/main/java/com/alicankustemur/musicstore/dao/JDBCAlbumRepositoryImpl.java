@@ -7,32 +7,36 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 
 import com.alicankustemur.musicstore.model.Album;
 
 @Component
-public class JdbcAlbumRepositoryImpl implements AlbumRepository
+public class JdbcAlbumRepositoryImpl extends JdbcDaoSupport implements AlbumRepository
 {
 
+	@Autowired
 	private DataSource dataSource;
 
-	@Autowired
-	public void setDataSource(DataSource dataSource)
+	@PostConstruct
+	public void initialize()
 	{
-		this.dataSource = dataSource;
+		setDataSource(dataSource);
 	}
 
+	@Override
 	public void save(Album album)
 	{
 		PreparedStatement preparedStatement = null;
 		try
 		{
-			// public Album sellAAlbum(String variation, String name, String artistName, String genre, int songNumbers);
 			Connection connection = dataSource.getConnection();
+			// public Album sellAAlbum(String variation, String name, String artistName, String genre, int songNumbers);
 			preparedStatement = connection.prepareStatement(
 					"INSERT INTO album (name,artist_name,variation,genre,song_numbers) VALUES (?,?,?,?,?) ");
 			preparedStatement.setString(1, album.getName());
@@ -51,6 +55,7 @@ public class JdbcAlbumRepositoryImpl implements AlbumRepository
 
 	}
 
+	@Override
 	public List<Album> getAllAlbumByArtistName(String artistName)
 	{
 		List<Album> albums = new ArrayList<Album>();
@@ -84,6 +89,7 @@ public class JdbcAlbumRepositoryImpl implements AlbumRepository
 		return albums;
 	}
 
+	@Override
 	public void deleteByName(String name)
 	{
 		PreparedStatement preparedStatement = null;
@@ -102,10 +108,36 @@ public class JdbcAlbumRepositoryImpl implements AlbumRepository
 		}
 	}
 
+	@Override
 	public Album getAlbumByName(String name)
 	{
-		// VTODO Auto-generated method stub
-		return null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
+		Album album = new Album();
+		try
+		{
+			Connection connection = dataSource.getConnection();
+			preparedStatement = connection.prepareStatement("SELECT * FROM album WHERE name = ?");
+			preparedStatement.setString(1, name);
+			resultSet = preparedStatement.executeQuery();
+			if (resultSet.next())
+			{
+				album.setArtistName(resultSet.getString("artist_name"));
+				album.setName(resultSet.getString("name"));
+				album.setId(resultSet.getLong("id"));
+				album.setGenre(resultSet.getString("genre"));
+				album.setSongNumbers(resultSet.getInt("song_numbers"));
+				album.setVariation(resultSet.getString("variation"));
+			}
+			resultSet.close();
+			preparedStatement.close();
+		}
+		catch (Exception e)
+		{
+			// VTODO: handle exception
+		}
+
+		return album;
 	}
 
 }

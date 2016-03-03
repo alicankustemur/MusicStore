@@ -5,34 +5,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Component;
 
 import com.alicankustemur.musicstore.model.Album;
 import com.alicankustemur.musicstore.model.Customer;
 
 @Component
-public class JdbcTemplateCustomerRepositoryImpl implements CustomerRepository
+public class JdbcTemplateCustomerRepositoryImpl extends JdbcDaoSupport implements CustomerRepository
 {
-	private JdbcTemplate jdbcTemplate;
 
 	@Autowired
-	public JdbcTemplateCustomerRepositoryImpl(DataSource dataSource)
+	private DataSource dataSource;
+
+	@PostConstruct
+	public void initialize()
 	{
-		jdbcTemplate = new JdbcTemplate(dataSource);
+		setDataSource(dataSource);
 	}
 
+	@Override
 	public void save(Customer customer)
 	{
+
 		String sql = "INSERT INTO customer (name,surname,album_id) VALUES (?,?,?)";
-		jdbcTemplate.update(sql, customer.getName(), customer.getSurname(), customer.getAlbum().getId());
+		getJdbcTemplate().update(sql, customer.getName(), customer.getSurname(), customer.getAlbum().getId());
 		// jdbcTemplate.queryForMap(sql,name);
 		// jdbcTemplate.queryForList(sql);
 	}
@@ -40,6 +45,7 @@ public class JdbcTemplateCustomerRepositoryImpl implements CustomerRepository
 	private class CustomerExtractor implements ResultSetExtractor<Customer>
 	{
 
+		@Override
 		public Customer extractData(ResultSet rs) throws SQLException, DataAccessException
 		{
 			return null;
@@ -66,17 +72,20 @@ public class JdbcTemplateCustomerRepositoryImpl implements CustomerRepository
 		return customer;
 	}
 
-	public int[] createRandomCustomer(final List<Customer> customers)
+	@Override
+	public int[] createBatchCustomer(final List<Customer> customers)
 	{
-		int[] updateCounts = jdbcTemplate.batchUpdate("INSERT INTO customer (name,surname) VALUES (?,?) ",
+		int[] updateCounts = getJdbcTemplate().batchUpdate("INSERT INTO customer (name,surname) VALUES (?,?) ",
 				new BatchPreparedStatementSetter()
 				{
 
+					@Override
 					public int getBatchSize()
 					{
 						return customers.size();
 					}
 
+					@Override
 					public void setValues(PreparedStatement ps, int i) throws SQLException
 					{
 						Customer customer = customers.get(i);
@@ -99,6 +108,13 @@ public class JdbcTemplateCustomerRepositoryImpl implements CustomerRepository
 				customers.add(customer2);
 				customerRepository.createRandomCustomer(customers);
 		 * */
+	}
+
+	@Override
+	public Customer getCustomerByName(String name)
+	{
+
+		return null;
 	}
 
 }

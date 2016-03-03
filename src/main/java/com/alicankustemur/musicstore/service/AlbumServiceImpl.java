@@ -9,16 +9,14 @@ import com.alicankustemur.musicstore.model.Album;
 @Component
 public class AlbumServiceImpl implements AlbumService
 {
+
 	@Autowired
 	private JdbcTemplateAlbumRepositoryImpl albumRepository;
 
-	public AlbumServiceImpl()
-	{
-		// VTODO Auto-generated constructor stub
-	}
-
+	@Override
 	public Album sellAAlbum(String name, String artistName, String variation, String genre, int songNumbers)
 	{
+
 		Album album = new Album();
 		album.setVariation(variation);
 		album.setName(name);
@@ -28,6 +26,14 @@ public class AlbumServiceImpl implements AlbumService
 		albumRepository.save(album);
 		return album;
 
+	}
+
+	@Override
+	public Album getAlbumByName(String name)
+	{
+		Album album = new Album();
+		album = albumRepository.getAlbumByName(name);
+		return album;
 	}
 
 }
