@@ -16,7 +16,7 @@ public class Main
 
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(BeanConfiguration.class);
 		AlbumService albumService = applicationContext.getBean(AlbumService.class);
-		albumService.sellAAlbum("The Wall", "lksadklasd", "sadaksldlka", "saldalkd", 123);
+		albumService.sellAAlbum("name3", "artistName3", "variation3", "genre3", 1);
 
 	}
 

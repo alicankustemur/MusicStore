@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -39,12 +40,8 @@ public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements A
 			String sql = "INSERT INTO album (name,artist_name,variation,genre,song_numbers) VALUES (?,?,?,?,?)";
 			getJdbcTemplate().update(sql, album.getName(), album.getArtistName(), album.getVariation(),
 					album.getGenre(), album.getSongNumbers());
-			System.out.println(album.getName() + " album saved.");
+			album.setSolded(true);
 
-		}
-		else
-		{
-			System.out.println(album.getName() + " is already exists in database.");
 		}
 
 	}
@@ -53,7 +50,7 @@ public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements A
 	public List<Album> getAllAlbumByArtistName(String artistName)
 	{
 		ResultSetExtractor<Album> albumExtractor = new AlbumExtractor();
-		String sql = "SELECT id,name,artist_name,variation,genre,song_numbers FROM album WHERE artist_name = ? ";
+		String sql = "SELECT * FROM album WHERE artist_name = ? ";
 		return getJdbcTemplate().query(sql, new Object[] {artistName}, new AlbumMapper());
 	}
 
@@ -67,8 +64,16 @@ public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements A
 	@Override
 	public Album getAlbumByName(String name)
 	{
-		String sql = "SELECT id,name,artist_name,variation,genre,song_numbers FROM album WHERE name = ? ";
-		return getJdbcTemplate().queryForObject(sql, new AlbumRowMapper(), name);
+		String sql = "SELECT * FROM album WHERE name = ? ";
+		try
+		{
+			Album album = getJdbcTemplate().queryForObject(sql, new AlbumRowMapper(), name);
+			return album;
+		}
+		catch (EmptyResultDataAccessException e)
+		{
+			return null;
+		}
 
 	}
 
@@ -84,7 +89,7 @@ public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements A
 			album.setVariation(rs.getString("variation"));
 			album.setGenre(rs.getString("genre"));
 			album.setSongNumbers(rs.getInt("song_numbers"));
-			System.out.println(rs.getString("artist_name") + "albums returned.");
+			System.out.println(album.getId());
 			return album;
 		}
 	}
@@ -110,7 +115,6 @@ public class JdbcTemplateAlbumRepositoryImpl extends JdbcDaoSupport implements A
 		album.setVariation(rs.getString("variation"));
 		album.setGenre(rs.getString("genre"));
 		album.setSongNumbers(rs.getInt("song_numbers"));
-		System.out.println(rs.getString("name") + " album returned.");
 		return album;
 
 	}

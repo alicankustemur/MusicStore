@@ -53,6 +53,8 @@ public class JdbcAlbumRepositoryImpl extends JdbcDaoSupport implements AlbumRepo
 			e.printStackTrace();
 		}
 
+		album.setSolded(true);
+
 	}
 
 	@Override

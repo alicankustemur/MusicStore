@@ -10,23 +10,26 @@ import com.alicankustemur.musicstore.model.Album;
 public class AlbumRepositoryImpl implements AlbumRepository
 {
 
+	@Override
 	public void save(Album album)
 	{
 		album.setSolded(true);
 	}
 
+	@Override
 	public List<Album> getAllAlbumByArtistName(String artistName)
 	{
 		// VTODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void deleteByName(String name)
 	{
-		System.out.println("album deleted.");
 
 	}
 
+	@Override
 	public Album getAlbumByName(String name)
 	{
 		// VTODO Auto-generated method stub
